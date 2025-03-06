@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="128" fill="#4F46E5"/>
+  
+  <!-- Grid Lines -->
+  <rect x="128" y="128" width="256" height="256" stroke="white" stroke-width="16" fill="none"/>
+  <line x1="256" y1="128" x2="256" y2="384" stroke="white" stroke-width="16"/>
+  <line x1="128" y1="256" x2="384" y2="256" stroke="white" stroke-width="16"/>
+  
+  <!-- Numbers -->
+  <text x="160" y="200" font-family="Arial" font-size="48" fill="white" font-weight="bold">1</text>
+  <text x="288" y="200" font-family="Arial" font-size="48" fill="white" font-weight="bold">2</text>
+  <text x="160" y="328" font-family="Arial" font-size="48" fill="white" font-weight="bold">3</text>
+  <text x="288" y="328" font-family="Arial" font-size="48" fill="white" font-weight="bold">4</text>
+</svg> 

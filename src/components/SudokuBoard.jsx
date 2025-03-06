@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase/config';
 import { doc, updateDoc, collection, addDoc, increment } from 'firebase/firestore';
 import { generateSudoku } from '../utils/sudokuGenerator';
+import { motion } from 'framer-motion';
 
 const SudokuBoard = () => {
   const navigate = useNavigate();
@@ -175,37 +176,90 @@ const SudokuBoard = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [selectedCell, board]);
 
+  const cellVariants = {
+    initial: { scale: 0.9, opacity: 0 },
+    animate: { scale: 1, opacity: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+
+  const buttonVariants = {
+    initial: { y: 20, opacity: 0 },
+    animate: { y: 0, opacity: 1 },
+    hover: { scale: 1.05 },
+    tap: { scale: 0.95 }
+  };
+
+  const containerVariants = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 }
+  };
+
   if (!game) return null;
 
   return (
-    <div className="sudoku-container">
-      <div className="sudoku-card">
-        <div className="sudoku-header">
+    <motion.div 
+      className="sudoku-container"
+      variants={containerVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+    >
+      <motion.div 
+        className="sudoku-card"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.div 
+          className="sudoku-header"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
+        >
           <h1 className="sudoku-title">Sudoku</h1>
           <div className="button-group">
-            <button className="sudoku-button new-game-button" onClick={handleNewGame}>
+            <motion.button 
+              className="sudoku-button new-game-button" 
+              onClick={handleNewGame}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+            >
               New Game
-            </button>
-            <button 
+            </motion.button>
+            <motion.button 
               className={`sudoku-button hint-button ${hintsRemaining === 0 ? 'disabled' : ''}`}
               onClick={handleHint}
               disabled={hintsRemaining === 0}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               Hint ({hintsRemaining})
-            </button>
-            <button 
+            </motion.button>
+            <motion.button 
               className="sudoku-button profile-button"
               onClick={() => navigate('/profile')}
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
             >
               Profile
-            </button>
+            </motion.button>
           </div>
-        </div>
-        <div className="sudoku-board">
+        </motion.div>
+        <motion.div 
+          className="sudoku-board"
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+        >
           <div className="sudoku-grid">
             {board.map((row, rowIndex) => (
               row.map((cell, colIndex) => (
-                <input
+                <motion.input
                   key={`${rowIndex}-${colIndex}`}
                   type="number"
                   min="1"
@@ -228,30 +282,46 @@ const SudokuBoard = () => {
                       handleNumberInput(value);
                     }
                   }}
+                  variants={cellVariants}
+                  whileHover="hover"
+                  whileTap="tap"
                 />
               ))
             ))}
           </div>
           
-          <div className="sudoku-numbers">
+          <motion.div 
+            className="sudoku-numbers"
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
+          >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-              <button
+              <motion.button
                 key={num}
                 className="sudoku-button"
                 onClick={() => handleNumberInput(num)}
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
               >
                 {num}
-              </button>
+              </motion.button>
             ))}
-          </div>
-        </div>
-        <div className="sudoku-instructions">
+          </motion.div>
+        </motion.div>
+        <motion.div 
+          className="sudoku-instructions"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8, duration: 0.5 }}
+        >
           <p>Click on a cell and use numbers 1-9 to play</p>
           <p>Or use the number buttons below the board</p>
           <p>You have {hintsRemaining} hints remaining</p>
-        </div>
-      </div>
-    </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 };
 
