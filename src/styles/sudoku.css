@@ -1,0 +1,274 @@
+:root {
+  --sudoku-primary: #4F46E5;
+  --sudoku-secondary: #818CF8;
+  --sudoku-bg: #F9FAFB;
+  --sudoku-cell: #FFFFFF;
+  --sudoku-border: #E5E7EB;
+  --sudoku-text: #1F2937;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--sudoku-bg);
+  color: var(--sudoku-text);
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.sudoku-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.sudoku-card {
+  max-width: 42rem;
+  width: 100%;
+  background-color: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+}
+
+.sudoku-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  text-align: center;
+  color: var(--sudoku-primary);
+  margin-bottom: 2rem;
+}
+
+.sudoku-board {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+}
+
+.sudoku-grid {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0;
+  border: 2px solid var(--sudoku-border);
+}
+
+.sudoku-cell {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 500;
+  border: 1px solid var(--sudoku-border);
+  background-color: var(--sudoku-cell);
+  text-align: center;
+  padding: 0;
+}
+
+.sudoku-cell:focus {
+  outline: none;
+  border-color: var(--sudoku-primary);
+  box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.5);
+}
+
+.sudoku-cell[readonly] {
+  background-color: #F9FAFB;
+  font-weight: bold;
+}
+
+.sudoku-cell.error {
+  color: #EF4444;
+}
+
+.sudoku-cell.border-right {
+  border-right: 2px solid var(--sudoku-border);
+}
+
+.sudoku-cell.border-bottom {
+  border-bottom: 2px solid var(--sudoku-border);
+}
+
+.sudoku-cell.completed {
+  background-color: #D1FAE5;
+  color: #065F46;
+  font-weight: bold;
+  border-color: #34D399;
+  cursor: not-allowed;
+}
+
+.sudoku-cell.completed:focus {
+  border-color: #34D399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+}
+
+.sudoku-cell.completed[readonly] {
+  background-color: #D1FAE5;
+  color: #065F46;
+  cursor: not-allowed;
+}
+
+.sudoku-cell.completed:hover {
+  background-color: #D1FAE5;
+  border-color: #34D399;
+}
+
+.sudoku-numbers {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 0.5rem;
+}
+
+.sudoku-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--sudoku-primary);
+  color: white;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.sudoku-button:hover {
+  background-color: var(--sudoku-secondary);
+}
+
+.sudoku-instructions {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #4B5563;
+}
+
+.sudoku-instructions p {
+  margin: 0.25rem 0;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.solution-button {
+  background-color: #10B981;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.solution-button:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.sudoku-cell.solution {
+  background-color: #D1FAE5;
+  color: #065F46;
+  font-weight: bold;
+  border-color: #34D399;
+  cursor: not-allowed;
+}
+
+.sudoku-cell.solution:focus {
+  border-color: #34D399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+}
+
+.solution-container {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #F3F4F6;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.solution-container h3 {
+  color: var(--sudoku-primary);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.solution-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.solution-row {
+  padding: 0.5rem;
+  background-color: white;
+  border-radius: 0.25rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: var(--sudoku-text);
+}
+
+.sudoku-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.new-game-button {
+  background-color: #4F46E5;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.new-game-button:hover {
+  background-color: #818CF8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.hint-button {
+  background-color: #10B981;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.hint-button:hover:not(.disabled) {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.hint-button.disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.sudoku-cell.hinted {
+  background-color: #D1FAE5;
+  color: #065F46;
+  font-weight: bold;
+  border-color: #34D399;
+  cursor: not-allowed;
+}
+
+.sudoku-cell.hinted:focus {
+  border-color: #34D399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+} 
