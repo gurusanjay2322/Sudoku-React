@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { db } from '../firebase/config';
+import { doc, updateDoc, collection, addDoc, increment } from 'firebase/firestore';
 import { generateSudoku } from '../utils/sudokuGenerator';
 
 const SudokuBoard = () => {
   const navigate = useNavigate();
+  const { currentUser } = useAuth();
   const [game, setGame] = useState(null);
   const [board, setBoard] = useState(Array(9).fill().map(() => Array(9).fill(0)));
   const [solution, setSolution] = useState(Array(9).fill().map(() => Array(9).fill(0)));
@@ -11,6 +15,7 @@ const SudokuBoard = () => {
   const [errors, setErrors] = useState(new Set());
   const [hintsRemaining, setHintsRemaining] = useState(3);
   const [hintedCells, setHintedCells] = useState(new Set());
+  const [startTime, setStartTime] = useState(null);
 
   // Initialize new game
   useEffect(() => {
@@ -18,6 +23,7 @@ const SudokuBoard = () => {
     setGame(newGame);
     setBoard(newGame.board);
     setSolution(newGame.solution);
+    setStartTime(Date.now());
   }, []);
 
   const isValidMove = (row, col, num) => {
@@ -50,6 +56,28 @@ const SudokuBoard = () => {
     );
   };
 
+  const saveGameData = async (won) => {
+    try {
+      // Update user stats
+      const userRef = doc(db, 'users', currentUser.uid);
+      await updateDoc(userRef, {
+        gamesPlayed: increment(1),
+        gamesWon: won ? increment(1) : increment(0)
+      });
+
+      // Save game record
+      await addDoc(collection(db, 'games'), {
+        userId: currentUser.uid,
+        timestamp: Date.now(),
+        won,
+        duration: Date.now() - startTime,
+        hintsUsed: 3 - hintsRemaining
+      });
+    } catch (error) {
+      console.error('Error saving game data:', error);
+    }
+  };
+
   const handleCellClick = (row, col) => {
     setSelectedCell({ row, col });
   };
@@ -74,6 +102,7 @@ const SudokuBoard = () => {
 
     // Check if puzzle is complete after the move
     if (isPuzzleComplete()) {
+      saveGameData(true);
       alert('Congratulations! You solved the puzzle!');
     }
   };
@@ -87,7 +116,12 @@ const SudokuBoard = () => {
     }
   };
 
-  const handleNewGame = () => {
+  const handleNewGame = async () => {
+    // Save current game as lost if it's not complete
+    if (!isPuzzleComplete()) {
+      await saveGameData(false);
+    }
+
     const newGame = generateSudoku();
     setGame(newGame);
     setBoard(newGame.board);
@@ -96,6 +130,7 @@ const SudokuBoard = () => {
     setSelectedCell(null);
     setHintsRemaining(3);
     setHintedCells(new Set());
+    setStartTime(Date.now());
   };
 
   const handleHint = () => {
@@ -157,6 +192,12 @@ const SudokuBoard = () => {
               disabled={hintsRemaining === 0}
             >
               Hint ({hintsRemaining})
+            </button>
+            <button 
+              className="sudoku-button profile-button"
+              onClick={() => navigate('/profile')}
+            >
+              Profile
             </button>
           </div>
         </div>

@@ -271,4 +271,21 @@ body {
 .sudoku-cell.hinted:focus {
   border-color: #34D399;
   box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+}
+
+.profile-button {
+  background-color: #6B7280;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.profile-button:hover {
+  background-color: #4B5563;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 } 
