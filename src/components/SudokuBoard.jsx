@@ -262,6 +262,8 @@ const SudokuBoard = () => {
                 <motion.input
                   key={`${rowIndex}-${colIndex}`}
                   type="number"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   min="1"
                   max="9"
                   value={cell || ''}

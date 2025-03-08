@@ -23,7 +23,7 @@ body {
 
 @layer components {
   .sudoku-cell {
-    @apply w-12 h-12 flex items-center justify-center text-xl font-medium border border-sudoku-border bg-sudoku-cell;
+    @apply w-8 h-8 sm:w-12 sm:h-12 flex items-center justify-center text-base sm:text-xl font-medium border border-sudoku-border bg-sudoku-cell;
   }
   
   .sudoku-cell:focus {
@@ -35,7 +35,31 @@ body {
   }
   
   .sudoku-button {
-    @apply px-4 py-2 bg-sudoku-primary text-white rounded-lg hover:bg-sudoku-secondary transition-colors duration-200;
+    @apply px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-sudoku-primary text-white rounded-lg hover:bg-sudoku-secondary transition-colors duration-200;
+  }
+
+  .game-container {
+    @apply max-w-full px-4 sm:px-0 mx-auto;
+  }
+
+  .controls-container {
+    @apply flex flex-wrap gap-2 justify-center mt-4;
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2em;
+    margin-bottom: 1rem;
+  }
+
+  .game-board {
+    @apply scale-90 transform-gpu;
+  }
+
+  .controls-container button {
+    @apply text-sm py-1 px-2;
   }
 }
 

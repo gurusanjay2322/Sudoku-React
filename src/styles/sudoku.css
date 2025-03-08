@@ -68,6 +68,16 @@ body {
   background-color: var(--sudoku-cell);
   text-align: center;
   padding: 0;
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  appearance: none;
+  color: var(--sudoku-text);
+}
+
+.sudoku-cell::-webkit-inner-spin-button,
+.sudoku-cell::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 .sudoku-cell:focus {
@@ -288,4 +298,41 @@ body {
   background-color: #4B5563;
   transform: translateY(-2px);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 640px) {
+  .sudoku-cell {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.125rem;
+  }
+
+  .sudoku-grid {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .sudoku-board {
+    padding: 1rem;
+  }
+
+  .sudoku-numbers {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .sudoku-numbers button {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .sudoku-container {
+    padding: 0.5rem;
+  }
+
+  .sudoku-card {
+    padding: 1rem;
+  }
 } 
