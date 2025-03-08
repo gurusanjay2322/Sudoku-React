@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { db } from '../firebase/config';
 import { doc, getDoc, collection, query, where, getDocs } from 'firebase/firestore';
@@ -7,6 +8,7 @@ import '../styles/profile.css';
 
 const Profile = () => {
   const { currentUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [stats, setStats] = useState({
     gamesPlayed: 0,
     gamesWon: 0,
@@ -101,6 +103,10 @@ const Profile = () => {
     }
   };
 
+  const handleBack = () => {
+    navigate('/game');
+  };
+
   return (
     <AnimatePresence mode="wait">
       {loading ? (
@@ -155,22 +161,25 @@ const Profile = () => {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.div 
-              className="profile-header"
-              initial={{ y: -20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-            >
+            <div className="profile-header">
+              <motion.button
+                className="back-button"
+                onClick={handleBack}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                ← Back to Game
+              </motion.button>
               <h2 className="profile-title">Profile</h2>
-              <motion.button 
-                className="logout-button" 
+              <motion.button
+                className="logout-button"
                 onClick={handleLogout}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 Logout
               </motion.button>
-            </motion.div>
+            </div>
             
             <motion.div 
               className="profile-info"

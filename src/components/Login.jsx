@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/auth.css';
 
@@ -9,8 +9,15 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const { login, signup } = useAuth();
+  const { login, signup, currentUser } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate('/game', { replace: true });
+    }
+  }, [currentUser, navigate]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -22,11 +29,10 @@ const Login = () => {
       } else {
         await login(email, password);
       }
-      navigate('/game');
     } catch (error) {
       setError(error.message);
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
@@ -43,6 +49,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <div className="form-group">
@@ -53,6 +60,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
           <button 
@@ -70,6 +78,7 @@ const Login = () => {
               <button 
                 className="switch-button"
                 onClick={() => setIsSignUp(false)}
+                disabled={loading}
               >
                 Login
               </button>
@@ -80,6 +89,7 @@ const Login = () => {
               <button 
                 className="switch-button"
                 onClick={() => setIsSignUp(true)}
+                disabled={loading}
               >
                 Sign Up
               </button>

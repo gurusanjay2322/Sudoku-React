@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
@@ -12,8 +12,24 @@ import './styles/profile.css';
 
 // Protected Route component
 const ProtectedRoute = ({ children }) => {
+  const { currentUser, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!currentUser) {
+    return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  }
+
+  return children;
+};
+
+// Home route component to handle redirection
+const HomeRoute = () => {
   const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/login" />;
+  return currentUser ? <Navigate to="/game" replace /> : <LandingPage />;
 };
 
 function App() {
@@ -21,7 +37,7 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={<HomeRoute />} />
           <Route path="/login" element={<Login />} />
           <Route 
             path="/game" 

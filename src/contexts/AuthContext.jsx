@@ -3,7 +3,9 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword, 
   signOut, 
-  onAuthStateChanged 
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
 } from 'firebase/auth';
 import { auth, db } from '../firebase/config';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -22,6 +24,7 @@ export function AuthProvider({ children }) {
   async function signup(email, password) {
     try {
       setError(null);
+      await setPersistence(auth, browserLocalPersistence);
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Create user profile in Firestore
       await setDoc(doc(db, 'users', userCredential.user.uid), {
@@ -37,14 +40,26 @@ export function AuthProvider({ children }) {
     }
   }
 
-  function login(email, password) {
-    setError(null);
-    return signInWithEmailAndPassword(auth, email, password);
+  async function login(email, password) {
+    try {
+      setError(null);
+      await setPersistence(auth, browserLocalPersistence);
+      return await signInWithEmailAndPassword(auth, email, password);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
   }
 
-  function logout() {
-    setError(null);
-    return signOut(auth);
+  async function logout() {
+    try {
+      setError(null);
+      await signOut(auth);
+      setCurrentUser(null);
+    } catch (error) {
+      setError(error.message);
+      throw error;
+    }
   }
 
   useEffect(() => {
@@ -82,6 +97,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     error,
+    loading,
     signup,
     login,
     logout
